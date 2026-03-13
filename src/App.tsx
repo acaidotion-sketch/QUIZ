@@ -1,260 +1,137 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Camera, 
-  ChevronLeft, 
-  Check, 
-  RefreshCw, 
-  MessageCircle,
-  ArrowRight
-} from 'lucide-react';
-import { QUIZ_QUESTIONS, QuizAnswers } from './types';
-
-const INITIAL_ANSWERS: QuizAnswers = {
-  objetivo_foto: '',
-  estilo_visual: '',
-  emocao: '',
-  enquadramento: '',
-  pose: '',
-  roupa: '',
-  acessorios: '',
-  ambiente: '',
-};
+import { Eye, Glasses, MapPin, MessageCircle, Sparkles, Star } from 'lucide-react';
 
 const WHATSAPP_NUMBER = '5591981305395';
 
+const services = [
+  {
+    title: 'Consulta Optométrica Completa',
+    description:
+      'Avaliação funcional da visão com foco em conforto visual para estudo, trabalho e rotina digital.',
+  },
+  {
+    title: 'Adaptação de Lentes de Contato',
+    description:
+      'Acompanhamento personalizado para você ganhar segurança, praticidade e nitidez no dia a dia.',
+  },
+  {
+    title: 'Óculos para Rotina Digital',
+    description:
+      'Soluções para reduzir fadiga visual em quem passa muitas horas em telas e ambientes com luz artificial.',
+  },
+];
+
+const testimonials = [
+  {
+    name: 'Renata M.',
+    text: 'Voltei a trabalhar sem dor de cabeça no fim do expediente. Atendimento humano e muito cuidadoso.',
+  },
+  {
+    name: 'Carlos A.',
+    text: 'A adaptação das lentes foi muito mais tranquila do que eu imaginava. Recomendo demais.',
+  },
+  {
+    name: 'Aline P.',
+    text: 'Ambiente confortável e explicações claras. Saí com tudo resolvido no mesmo dia.',
+  },
+];
+
+function sendToWhatsApp() {
+  const message = encodeURIComponent(
+    'Olá! Quero agendar uma avaliação visual e receber orientações sobre lentes e óculos.',
+  );
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
+}
+
 export default function App() {
-  const [step, setStep] = useState<'intro' | 'quiz' | 'result'>('intro');
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<QuizAnswers>(INITIAL_ANSWERS);
-
-  const currentQuestion = QUIZ_QUESTIONS[currentQuestionIndex];
-
-  const handleStart = () => setStep('quiz');
-
-  const handleAnswer = (value: string) => {
-    const variable = currentQuestion.variable as keyof QuizAnswers;
-    const newAnswers = { ...answers, [variable]: value };
-    setAnswers(newAnswers);
-
-    if (currentQuestionIndex < QUIZ_QUESTIONS.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-    } else {
-      setStep('result');
-    }
-  };
-
-  const handleBack = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
-    } else {
-      setStep('intro');
-    }
-  };
-
-  const sendToWhatsApp = () => {
-    const message = `Olá, acabei de responder o quiz de retrato e quero criar minha foto.
-
-Meu plano de foto é:
-
-Objetivo da foto: ${answers.objetivo_foto}
-Estilo visual: ${answers.estilo_visual}
-Emoção: ${answers.emocao}
-Enquadramento: ${answers.enquadramento}
-Pose: ${answers.pose}
-Roupa: ${answers.roupa}
-Acessórios: ${answers.acessorios}
-Ambiente: ${answers.ambiente}
-
-Gostaria de gerar minhas fotos com essas características.`;
-
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
-  const resetQuiz = () => {
-    setStep('intro');
-    setCurrentQuestionIndex(0);
-    setAnswers(INITIAL_ANSWERS);
-  };
-
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-900 font-sans selection:bg-emerald-100">
-      <div className="max-w-2xl mx-auto px-6 py-12 md:py-20">
-        <AnimatePresence mode="wait">
-          {step === 'intro' && (
-            <motion.div
-              key="intro"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="text-center space-y-8"
-            >
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-emerald-600 text-white shadow-xl shadow-emerald-200 mb-4">
-                <Camera size={40} />
-              </div>
-              <div className="space-y-4">
-                <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-950">
-                  Planejamento de Retrato <span className="text-emerald-600">Pro</span>
-                </h1>
-                <p className="text-lg text-neutral-600 max-w-md mx-auto leading-relaxed">
-                  Crie seu briefing fotográfico em segundos e receba atendimento personalizado via WhatsApp.
-                </p>
-              </div>
-              <div className="pt-8">
-                <button
-                  onClick={handleStart}
-                  className="group relative inline-flex items-center gap-2 px-8 py-4 bg-neutral-950 text-white rounded-2xl font-semibold text-lg hover:bg-neutral-800 transition-all active:scale-95 shadow-lg shadow-neutral-200"
-                >
-                  Começar Planejamento
-                  <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} />
-                </button>
-                <p className="mt-4 text-sm text-neutral-400">Rápido e intuitivo</p>
-              </div>
-            </motion.div>
-          )}
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <header className="border-b border-white/10">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-5">
+          <div className="flex items-center gap-2 text-lg font-semibold tracking-wide">
+            <Eye className="text-cyan-300" size={22} />
+            Óptica Viva
+          </div>
+          <button
+            onClick={sendToWhatsApp}
+            className="rounded-full bg-cyan-300 px-5 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200"
+          >
+            Agendar no WhatsApp
+          </button>
+        </div>
+      </header>
 
-          {step === 'quiz' && (
-            <motion.div
-              key="quiz"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-8"
-            >
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={handleBack}
-                  className="p-2 -ml-2 text-neutral-400 hover:text-neutral-900 transition-colors"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-                <div className="flex gap-1">
-                  {QUIZ_QUESTIONS.map((_, i) => (
-                    <div
-                      key={i}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        i === currentQuestionIndex ? 'w-8 bg-emerald-600' : 'w-2 bg-neutral-200'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm font-medium text-neutral-400">
-                  {currentQuestionIndex + 1}/{QUIZ_QUESTIONS.length}
-                </span>
-              </div>
+      <main>
+        <section className="mx-auto grid w-full max-w-6xl gap-10 px-6 py-16 md:grid-cols-2 md:py-24">
+          <div className="space-y-6">
+            <p className="inline-flex items-center gap-2 rounded-full border border-cyan-300/40 px-4 py-2 text-sm text-cyan-200">
+              <Sparkles size={16} /> Atendimento para conforto visual
+            </p>
+            <h1 className="text-4xl font-bold leading-tight md:text-5xl">
+              Cuide da sua visão com uma experiência moderna e acolhedora.
+            </h1>
+            <p className="max-w-xl text-lg text-slate-300">
+              Clínica visual inspirada em bem-estar: avaliação completa, orientação clara e soluções
+              personalizadas para sua rotina.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={sendToWhatsApp}
+                className="inline-flex items-center gap-2 rounded-xl bg-cyan-300 px-6 py-3 font-semibold text-slate-950 transition hover:bg-cyan-200"
+              >
+                <MessageCircle size={18} /> Falar com especialista
+              </button>
+              <a
+                href="#servicos"
+                className="rounded-xl border border-white/25 px-6 py-3 font-semibold transition hover:bg-white/10"
+              >
+                Ver serviços
+              </a>
+            </div>
+          </div>
 
-              <div className="space-y-6">
-                <h2 className="text-2xl md:text-3xl font-bold text-neutral-950 leading-tight">
-                  {currentQuestion.text}
-                </h2>
+          <div className="rounded-3xl border border-cyan-200/20 bg-gradient-to-br from-cyan-400/20 to-blue-500/15 p-8 shadow-2xl shadow-cyan-950/40">
+            <h2 className="mb-6 text-2xl font-semibold">Por que escolher a Óptica Viva?</h2>
+            <ul className="space-y-4 text-slate-200">
+              <li className="flex items-start gap-3">
+                <Glasses className="mt-1 text-cyan-300" size={18} />
+                Soluções sob medida para óculos e lentes, com foco no seu estilo de vida.
+              </li>
+              <li className="flex items-start gap-3">
+                <Star className="mt-1 text-cyan-300" size={18} />
+                Equipe experiente em desconforto visual de quem usa telas por longos períodos.
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin className="mt-1 text-cyan-300" size={18} />
+                Localização central com atendimento por horário agendado para mais comodidade.
+              </li>
+            </ul>
+          </div>
+        </section>
 
-                <div className="grid grid-cols-1 gap-3">
-                  {currentQuestion.options.map((option) => {
-                    const isSelected = answers[currentQuestion.variable as keyof QuizAnswers] === option.label;
+        <section id="servicos" className="mx-auto w-full max-w-6xl px-6 pb-12">
+          <h2 className="mb-8 text-3xl font-bold">Nossos serviços</h2>
+          <div className="grid gap-5 md:grid-cols-3">
+            {services.map((service) => (
+              <article key={service.title} className="rounded-2xl border border-white/10 bg-slate-900 p-6">
+                <h3 className="mb-3 text-xl font-semibold text-cyan-200">{service.title}</h3>
+                <p className="text-slate-300">{service.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
-                    return (
-                      <button
-                        key={option.id}
-                        onClick={() => handleAnswer(option.label)}
-                        className={`group flex items-center justify-between p-5 rounded-2xl border-2 text-left transition-all active:scale-[0.98] ${
-                          isSelected
-                            ? 'border-emerald-600 bg-emerald-50/50 text-emerald-900'
-                            : 'border-neutral-100 hover:border-neutral-200 hover:bg-white'
-                        }`}
-                      >
-                        <span className="font-medium">{option.label}</span>
-                        {isSelected && (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-white"
-                          >
-                            <Check size={14} strokeWidth={3} />
-                          </motion.div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {step === 'result' && (
-            <motion.div
-              key="result"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="space-y-10"
-            >
-              <div className="text-center space-y-2">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 mb-2">
-                  <Check size={32} />
-                </div>
-                <h2 className="text-3xl font-bold text-neutral-950">Seu Plano de Retrato</h2>
-                <p className="text-neutral-500">Confira o resumo do seu briefing abaixo.</p>
-              </div>
-
-              <div className="bg-white rounded-3xl border border-neutral-100 p-8 shadow-sm space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold uppercase tracking-widest text-neutral-400">Objetivo da Foto</p>
-                    <p className="font-medium text-neutral-800">{answers.objetivo_foto}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold uppercase tracking-widest text-neutral-400">Estilo Visual</p>
-                    <p className="font-medium text-neutral-800">{answers.estilo_visual}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold uppercase tracking-widest text-neutral-400">Emoção</p>
-                    <p className="font-medium text-neutral-800">{answers.emocao}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold uppercase tracking-widest text-neutral-400">Enquadramento</p>
-                    <p className="font-medium text-neutral-800">{answers.enquadramento}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold uppercase tracking-widest text-neutral-400">Pose</p>
-                    <p className="font-medium text-neutral-800">{answers.pose}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold uppercase tracking-widest text-neutral-400">Roupa</p>
-                    <p className="font-medium text-neutral-800">{answers.roupa}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold uppercase tracking-widest text-neutral-400">Acessórios</p>
-                    <p className="font-medium text-neutral-800">{answers.acessorios}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold uppercase tracking-widest text-neutral-400">Ambiente</p>
-                    <p className="font-medium text-neutral-800">{answers.ambiente}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <button
-                  onClick={sendToWhatsApp}
-                  className="w-full group relative flex items-center justify-center gap-3 py-5 bg-emerald-600 text-white rounded-2xl font-bold text-lg hover:bg-emerald-700 transition-all active:scale-95 shadow-xl shadow-emerald-100"
-                >
-                  <MessageCircle size={24} />
-                  Enviar meu plano pelo WhatsApp
-                </button>
-
-                <button
-                  onClick={resetQuiz}
-                  className="w-full flex items-center justify-center gap-2 py-4 text-neutral-500 font-semibold hover:text-neutral-950 transition-colors"
-                >
-                  <RefreshCw size={18} />
-                  Refazer Quiz
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+        <section className="mx-auto w-full max-w-6xl px-6 pb-20">
+          <h2 className="mb-8 text-3xl font-bold">Quem já passou por aqui</h2>
+          <div className="grid gap-5 md:grid-cols-3">
+            {testimonials.map((item) => (
+              <blockquote key={item.name} className="rounded-2xl border border-white/10 bg-slate-900 p-6">
+                <p className="mb-4 text-slate-200">“{item.text}”</p>
+                <cite className="text-sm font-semibold text-cyan-200 not-italic">{item.name}</cite>
+              </blockquote>
+            ))}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
